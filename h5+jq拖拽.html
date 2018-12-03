@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="referrer" content="always"/>
+    <style type="text/css">
+        /*拖拽时，经过的其他对象的样式 */
+        .overClass{
+            border: 1px solid #000;
+        }
+        /*拖拽对象的样式 */
+        .dragClass {
+            background-color: gray;
+        }
+        .item{
+            border:1px solid #eee;
+            margin: 10px;
+        }
+        .item img{
+            width: 100px;
+            height: 50px;
+        }
+    </style>
+
+</head>
+<body>
+<div class='box'>
+    <div class='item' id='1'>12323</div>
+    <div class='item' id='2'>
+        <p>afsdfs</p>
+        <img src="123.jpg">
+    </div>
+    <div class='item' id='3'>
+        <ul>
+            <li>1212</li>
+            <li>asgag</li>
+            <li>121adgag</li>
+            <li>你好你还</li>
+        </ul>
+    </div>
+</div>
+<!--<table style="border-collapse:collapse;">-->
+    <!--<thead>-->
+    <!--<tr>-->
+        <!--<th>列1</th><th>列2</th><th>列3</th><th>列4</th></tr>-->
+    <!--</thead>-->
+    <!--<tbody  style="cursor: pointer;">-->
+    <!--<tr id="1">-->
+        <!--<td>1</td><td>1</td><td>1</td><td>1</td></tr>-->
+    <!--<tr id="2">-->
+        <!--<td>2</td><td>2</td><td>2</td><td>2</td></tr>-->
+    <!--<tr id="3">-->
+        <!--<td>3</td><td>3</td><td>3</td><td>3</td>-->
+    <!--</tr>-->
+    <!--<tr id="4">-->
+        <!--<td>4</td><td>4</td><td>4</td><td>4</td></tr>-->
+    <!--<tr id="5">-->
+        <!--<td>5</td><td>5</td><td>5</td><td>5</td></tr>-->
+    <!--</tbody>-->
+<!--</table>-->
+<script type="text/javascript" src="jquery-3.3.1.min.js"></script>
+<script>
+    $(function () {
+        $('.item').attr("draggable",true)
+        // console.log($('.item'))
+        $('.item').bind("dragstart",function (event) {
+            console.log(event.originalEvent)
+            var originaEvent=event.originalEvent;
+            originaEvent.dataTransfer.setData('srcDomId',originaEvent.target.id);
+            $(this).addClass('dragClass');
+        }).bind('dragend',function (event) {
+            var originaEvent=event.originalEvent;
+            $(this).removeClass('dragClass')
+        });
+        $('.item').bind("dragover",function (event) {
+            if($(this).is('.item')){
+                console.log($(this).attr('id'));
+                $(this).addClass('overClass');
+            }
+            event.preventDefault();
+        })
+        $('.item').bind('dragleave',function (evnet) {
+            $(this).removeClass('overClass');
+            event.preventDefault()
+        })
+        $('.item').bind('drop',function (event) {
+            var originaEvent=event.originalEvent;
+            console.log(originaEvent)
+            var srcDomId=originaEvent.dataTransfer.getData('srcDomId');
+            console.log(srcDomId)
+            $(this).removeClass('overClass');
+            if($(this).attr('id')!=srcDomId){
+                $(this).before($("#"+srcDomId).detach())
+            }
+            event.preventDefault()
+        })
+    })
+</script>
+<!--<script type="text/javascript">-->
+    <!--$(function () {-->
+        <!--console.log(1)-->
+        <!--$("tbody tr").attr("draggable", true); // 为对象添加可拖拽属性-->
+        <!--console.log($("tbody tr"))-->
+        <!--// 拖动对象-->
+        <!--$("tbody tr").bind("dragstart", function (event) { //dragstart 拖动时触发-->
+            <!--var originalEvent = event.originalEvent;-->
+            <!--originalEvent.dataTransfer.setData("srcDomId", originalEvent.target.id);-->
+            <!--$(this).addClass("dragClass");-->
+        <!--}).bind("dragend", function (event) { //dragend  户完成元素拖动后触发-->
+            <!--var originalEvent = event.originalEvent;-->
+            <!--$(this).removeClass("dragClass");-->
+        <!--});-->
+        <!--// 拖动时经过对象-->
+        <!--$("tbody tr").bind("dragover", function (event) {-->
+            <!--if ($(this).is("tr")) {-->
+                <!--console.log($(this).attr("id"));-->
+                <!--$(this).addClass("overClass");-->
+            <!--}-->
+            <!--event.preventDefault(); // dragover 默认情况下,数据/元素不能在其他元素中被拖放。对于drop我们必须防止元素的默认处理-->
+        <!--});-->
+        <!--//拖动时经过对象-->
+        <!--$("tbody tr").bind("dragleave", function (event) { //-->
+            <!--$(this).removeClass("overClass");-->
+            <!--event.preventDefault();-->
+        <!--});-->
+        <!--// 放置区域对象-->
+        <!--$("tbody tr").bind("drop", function (event) {-->
+            <!--var originalEvent = event.originalEvent;-->
+            <!--var srcDomId = originalEvent.dataTransfer.getData("srcDomId");-->
+            <!--$(this).removeClass("overClass");-->
+            <!--if ($(this).attr("id") != srcDomId) {-->
+                <!--$(this).before($("#" + srcDomId).detach());-->
+            <!--}-->
+            <!--event.preventDefault();-->
+
+        <!--});-->
+    <!--})();-->
+
+<!--</script>-->
+</body>
+</html>
