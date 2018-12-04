@@ -1,0 +1,80 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <style>
+        div {
+            width: 150px;
+            height: 100px;
+            border: 1px solid #2B76F0;
+            margin: 10px;
+            float: left;
+        }
+
+        div img {
+            width: 150px;
+            height: 100px;
+        }
+    </style>
+</head>
+<body>
+
+<div draggable="true">
+    <img src="aa.jpg ">
+</div>
+<div draggable="true">
+    <img src="ss.jpg ">
+</div>
+<div draggable="true">
+    <img src="dd.jpg ">
+</div>
+<script src=jquery-3.3.1.min.js></script>
+<script type="text/javascript">
+    var srcdiv = null;
+
+
+    $('div').bind('dragover', function (ev) {
+        ev.preventDefault();
+    })
+    $('div').bind('dragstart', function (ev) {
+        console.log(ev)
+        var divdom = $(this)
+        console.log(divdom)
+        srcdiv = divdom;
+        ev.originalEvent.dataTransfer.setData("text/html", divdom.html());
+    })
+    $('div').bind('drop', function (ev) {
+        console.log(ev)
+        ev.preventDefault();
+        var divdom = $(this)
+        console.log(divdom.html())
+        console.log(srcdiv.html())
+        if (srcdiv != divdom) {
+            srcdiv.html(divdom.html())
+            divdom.html(ev.originalEvent.dataTransfer.getData("text/html"))
+        }
+    })
+    // function allowDrop(ev)
+    // {
+    //     ev.preventDefault();
+    // }
+    //
+    // var srcdiv = null;
+    // function drag(ev,divdom)
+    // {
+    //     srcdiv=divdom;
+    //     ev.dataTransfer.setData("text/html",divdom.innerHTML);
+    // }
+    //
+    // function drop(ev,divdom)
+    // {
+    //     ev.preventDefault();
+    //     if(srcdiv != divdom){
+    //         srcdiv.innerHTML = divdom.innerHTML;
+    //         divdom.innerHTML=ev.dataTransfer.getData("text/html");
+    //     }
+    // }
+</script>
+</body>
+</html>
